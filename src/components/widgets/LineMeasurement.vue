@@ -33,44 +33,30 @@ import { sumBy } from "lodash";
 import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import useCellAnalysisHelper from "../hooks/useCellAnalysisHelper";
+import useWidget from "../hooks/useWidget";
 import createLineMeasureScheduler from "../scheduler/lineMeasure";
+import { setCenterLabel } from "../utils";
 
-import { ElButton } from "element-plus";
 const props = defineProps(["view"]);
 
-// 状态
-const state = ref("finish"); // ready | active | finish
+const emits = defineEmits(["active"]);
 
 // 测量结果
 const distance = ref(0);
 
 const scheduler = createLineMeasureScheduler();
 
+const { state, handleSwitch, handleNew, destroy } = useWidget(
+  emits.bind(null, "active", "line"),
+  startSketch,
+  scheduler.terminate
+);
+
 const { loading, renderCellAnalysisHelper, helpDestroy } = useCellAnalysisHelper(
   props.view,
   scheduler,
   "#line-control-slot"
 );
-
-// 图层、Sketch 销毁函数
-let _destroyLayerAndSketch = () => void 0;
-
-// 控件开关
-function handleSwitch() {
-  state.value = state.value === "finish" ? "ready" : "finish";
-  if (state.value === "finish") {
-    _destroyLayerAndSketch();
-  } else {
-    _destroyLayerAndSketch = startSketch();
-  }
-}
-
-// 新测量
-function handleNew() {
-  _destroyLayerAndSketch();
-  state.value = "ready";
-  _destroyLayerAndSketch = startSketch();
-}
 
 // 开始测量
 function startSketch() {
@@ -80,7 +66,7 @@ function startSketch() {
   const map = view.map;
 
   const graphicsLayer = new GraphicsLayer({
-    id: "measure-line",
+    id: "measurement",
     elevationInfo: {
       mode: "on-the-ground",
     },
@@ -133,7 +119,6 @@ function startSketch() {
     sketchViewModel.destroy();
     map.remove(graphicsLayer);
     helpDestroy();
-    _destroyLayerAndSketch = () => void 0;
   };
 }
 
@@ -149,54 +134,6 @@ function onMeasure(graphic) {
   });
 }
 
-// 设置 label 标签
-function setCenterLabel(graphic, text) {
-  const layer = graphic.layer;
-
-  const center = graphic.geometry.extent.center;
-
-  const labelGraphic = layer.graphics.find((g) => g.for === graphic);
-
-  if (text === null) return void (labelGraphic.visible = false);
-
-  const symbol = {
-    type: "point-3d",
-    verticalOffset: {
-      screenLength: 15,
-    },
-    symbolLayers: [
-      {
-        type: "text",
-        material: { color: "white" },
-        text,
-        size: 12,
-        background: { color: [0, 0, 0, 0.6] },
-        verticalAlignment: "bottom",
-      },
-    ],
-  };
-
-  if (labelGraphic) {
-    labelGraphic.visible = true;
-    labelGraphic.geometry = center;
-    labelGraphic.symbol = symbol;
-    return void 0;
-  }
-
-  layer.add({
-    type: "graphic",
-    geometry: center,
-    symbol,
-    for: graphic,
-  });
-}
-
-function destroy() {
-  loading.value = false;
-  state.value = "finish";
-  _destroyLayerAndSketch();
-}
-
 onUnmounted(() => {
   scheduler.terminate(true);
 });
@@ -208,8 +145,9 @@ defineExpose({
 
 <style scoped>
 .measurement-container {
-  position: absolute;
-  right: 55px;
+  position: fixed;
+  right: 85px;
+  bottom: 35px;
   background-color: white;
   padding: 12px 18px;
   display: flex;

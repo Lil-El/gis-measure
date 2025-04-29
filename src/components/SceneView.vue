@@ -1,9 +1,9 @@
 <template>
   <div id="map-view" class="m-scene-view-container">
     <div v-if="sceneView" class="measurement-widget-container m-widget">
-      <line-measurement ref="lineMeasureRef" :view="sceneView" />
-      <area-measurement ref="areaMeasureRef" :view="sceneView" />
-      <volume-measurement ref="volumeMeasureRef" :view="sceneView" />
+      <line-measurement ref="lineMeasureRef" :view="sceneView" @active="handleMeasure" />
+      <area-measurement ref="areaMeasureRef" :view="sceneView" @active="handleMeasure" />
+      <volume-measurement ref="volumeMeasureRef" :view="sceneView" @active="handleMeasure" />
     </div>
   </div>
 </template>
@@ -45,6 +45,9 @@ const activeWidget = ref(null);
 // 距离测量组件
 const lineMeasureRef = ref(null);
 
+// 面积测量组件
+const areaMeasureRef = ref(null);
+
 // 体积测量组件
 const volumeMeasureRef = ref(null);
 
@@ -56,6 +59,23 @@ onMounted(() => {
     createLayer();
   });
 });
+
+// 测量控件
+function handleMeasure(measureType, status) {
+  const widgetMap = {
+    line: lineMeasureRef.value,
+    area: areaMeasureRef.value,
+    volume: volumeMeasureRef.value,
+  };
+
+  if (status === "on") {
+    activeWidget.value?.destroy();
+    activeWidget.value = widgetMap[measureType];
+  }
+  if (status === "off") {
+    activeWidget.value = null;
+  }
+}
 
 // 创建地图视图
 function createMapView() {
@@ -301,35 +321,13 @@ onUnmounted(() => {
 
 .m-scene-view-container {
   width: 100%;
-  position: relative;
+  position: fixed;
 
   .measurement-widget-container {
     position: absolute;
-    bottom: 324px;
-    right: 15px;
+    bottom: 35px;
+    right: 25px;
     border-radius: 4px;
-  }
-  .m-widget-measure-line {
-    position: absolute;
-    right: 15px;
-    bottom: 395px;
-  }
-  .m-widget-measure-area {
-    position: absolute;
-    right: 15px;
-    bottom: 354px;
-  }
-
-  .m-widget-measure-volume {
-    position: absolute;
-    right: 70px;
-    bottom: 15px;
-  }
-
-  .m-widget-measure-volume2 {
-    position: absolute;
-    right: 15px;
-    bottom: 310px;
   }
 }
 

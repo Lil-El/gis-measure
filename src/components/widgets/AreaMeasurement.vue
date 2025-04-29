@@ -15,9 +15,7 @@
       <div class="measurement-container" v-show="state === 'active'" v-loading="loading">
         <div class="measurement-content">
           <div>面积</div>
-          <div class=".esri-direct-line-measurement-3d__measurement-item-value">
-            {{ Number(areaMeasurement).toFixed(2) }} m²
-          </div>
+          <div class=".esri-direct-line-measurement-3d__measurement-item-value">{{ Number(area).toFixed(2) }} m²</div>
         </div>
         <div id="area-control-slot"></div>
         <el-button class="measurement-button" @click="handleNew">新测量</el-button>
@@ -33,19 +31,24 @@ import { sumBy } from "lodash";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel.js";
 import useCellAnalysisHelper from "../hooks/useCellAnalysisHelper";
+import useWidget from "../hooks/useWidget";
 import createAreaMeasureScheduler from "../scheduler/areaMeasure";
-
-import { ElButton, ElSlider } from "element-plus";
+import { setCenterLabel } from "../utils";
 
 const props = defineProps(["view"]);
 
-// 控件状态
-const state = ref("finish"); // ready | active | finish
+const emits = defineEmits(["active"]);
 
 // 测量结果
-const areaMeasurement = ref(0);
+const area = ref(0);
 
 const scheduler = createAreaMeasureScheduler();
+
+const { state, handleSwitch, handleNew, destroy } = useWidget(
+  emits.bind(null, "active", "area"),
+  startSketch,
+  scheduler.terminate
+);
 
 const { loading, renderCellAnalysisHelper, helpDestroy } = useCellAnalysisHelper(
   props.view,
@@ -53,35 +56,15 @@ const { loading, renderCellAnalysisHelper, helpDestroy } = useCellAnalysisHelper
   "#area-control-slot"
 );
 
-// 图层、Sketch 销毁函数
-let _destroyLayerAndSketch = () => void 0;
-
-// 控件开关
-function handleSwitch() {
-  state.value = state.value === "finish" ? "ready" : "finish";
-  if (state.value === "finish") {
-    destroy();
-  } else {
-    _destroyLayerAndSketch = startSketch();
-  }
-}
-
-// 新测量
-function handleNew() {
-  destroy();
-  state.value = "ready";
-  _destroyLayerAndSketch = startSketch();
-}
-
 // 开始测量
 function startSketch() {
-  areaMeasurement.value = 0;
+  area.value = 0;
 
   const view = props.view;
   const map = view.map;
 
   const graphicsLayer = new GraphicsLayer({
-    id: "measure-area",
+    id: "measurement",
     elevationInfo: {
       mode: "on-the-ground",
     },
@@ -143,21 +126,16 @@ function startSketch() {
     sketchViewModel.destroy();
     map.remove(graphicsLayer);
     helpDestroy();
-    _destroyLayerAndSketch = () => void 0;
   };
 }
 
 // 测量回调
 function onMeasure(graphic) {
   renderCellAnalysisHelper(graphic, (cells) => {
-    areaMeasurement.value = sumBy(cells, (c) => c.attributes.area);
-  });
-}
+    area.value = sumBy(cells, (c) => c.attributes.area);
 
-function destroy() {
-  state.value = "finish";
-  scheduler.terminate();
-  _destroyLayerAndSketch();
+    setCenterLabel(graphic, area.value.toFixed(2) + " m²");
+  });
 }
 
 onUnmounted(() => {
@@ -171,8 +149,9 @@ defineExpose({
 
 <style scoped>
 .measurement-container {
-  position: absolute;
-  right: 55px;
+  position: fixed;
+  right: 85px;
+  bottom: 35px;
   background-color: white;
   padding: 12px 18px;
   display: flex;

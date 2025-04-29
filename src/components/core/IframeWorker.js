@@ -41,10 +41,11 @@ export class IframeWorker {
   #createFrame(href, uuid) {
     const iframe = document.createElement("iframe");
     iframe.src = href;
-    iframe.style.display = "inline-block";
+    iframe.style.position = "fixed";
+    iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
-    iframe.style.width = "49vw";
-    iframe.style.height = "49vh";
+    iframe.style.width = "100vw";
+    iframe.style.height = "100vh";
 
     iframe.contentWindow.uuid = uuid;
 

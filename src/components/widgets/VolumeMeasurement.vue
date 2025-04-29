@@ -40,13 +40,13 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel.js";
 import { getElevation } from "../utils";
 import useCellAnalysisHelper from "../hooks/useCellAnalysisHelper";
+import useWidget from "../hooks/useWidget";
 import createVolumeMeasureScheduler from "../scheduler/volumeMeasure";
+import { setCenterLabel } from "../utils";
 
-import { ElButton, ElSlider } from "element-plus";
 const props = defineProps(["view"]);
 
-// 控件状态
-const state = ref("finish"); // ready | active | finish
+const emits = defineEmits(["active"]);
 
 // 测量结果
 const volume = reactive({
@@ -56,6 +56,12 @@ const volume = reactive({
 
 const scheduler = createVolumeMeasureScheduler();
 
+const { state, handleSwitch, handleNew, destroy } = useWidget(
+  emits.bind(null, "active", "volume"),
+  startSketch,
+  scheduler.terminate
+);
+
 const { loading, renderCellAnalysisHelper, helpDestroy } = useCellAnalysisHelper(
   props.view,
   scheduler,
@@ -63,26 +69,6 @@ const { loading, renderCellAnalysisHelper, helpDestroy } = useCellAnalysisHelper
 );
 
 let baseElevation = 0;
-
-// 图层、Sketch 销毁函数
-let _destroyLayerAndSketch = () => void 0;
-
-// 控件开关
-function handleSwitch() {
-  state.value = state.value === "finish" ? "ready" : "finish";
-  if (state.value === "finish") {
-    destroy();
-  } else {
-    _destroyLayerAndSketch = startSketch();
-  }
-}
-
-// 新测量
-function handleNew() {
-  destroy();
-  state.value = "ready";
-  _destroyLayerAndSketch = startSketch();
-}
 
 // 开始测量
 function startSketch() {
@@ -92,7 +78,7 @@ function startSketch() {
   const map = view.map;
 
   const graphicsLayer = new GraphicsLayer({
-    id: "measure-volume",
+    id: "measurement",
     elevationInfo: {
       mode: "absolute-height",
     },
@@ -165,7 +151,6 @@ function startSketch() {
     sketchViewModel.destroy();
     map.remove(graphicsLayer);
     helpDestroy();
-    _destroyLayerAndSketch = () => void 0;
   };
 }
 
@@ -180,6 +165,9 @@ async function onMeasure(graphic) {
       cells.filter((c) => c.attributes.vol < 0),
       (c) => -c.attributes.vol
     );
+
+    const text = `填方量 ${Number(volume.cut).toFixed(2)} m³\n挖方量 ${Number(volume.fill).toFixed(2)} m³`;
+    setCenterLabel(graphic, text);
   });
 }
 
@@ -198,12 +186,6 @@ function findUnique(arr) {
   }
 }
 
-function destroy() {
-  state.value = "finish";
-  scheduler.terminate();
-  _destroyLayerAndSketch();
-}
-
 onUnmounted(() => {
   scheduler.terminate(true);
 });
@@ -215,8 +197,9 @@ defineExpose({
 
 <style scoped>
 .measurement-container {
-  position: absolute;
-  right: 55px;
+  position: fixed;
+  right: 85px;
+  bottom: 35px;
   background-color: white;
   padding: 12px 18px;
   display: flex;
