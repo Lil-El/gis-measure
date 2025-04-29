@@ -1,5 +1,5 @@
 import moment from "moment";
-import { log } from "@processor/shared";
+import { log } from "@mino_97/shared";
 
 export class ThreadPool {
   ThreadConstructor;

@@ -1,3 +1,3 @@
-export function log() {
-  console.log("hello world");
+export function log(...args) {
+  console.log("this is shared log:", ...args);
 }

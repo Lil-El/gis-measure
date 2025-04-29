@@ -1,5 +1,5 @@
 {
-  "name": "@processor/thread-pool",
+  "name": "@mino_97/thread-pool",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@processor/shared": "workspace:^",
+    "@mino_97/shared": "workspace:^",
     "moment": "^2.30.1"
   }
 }
