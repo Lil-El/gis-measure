@@ -1,5 +1,13 @@
 # @mino_97/thread-pool
 
+## 1.0.1
+
+### Patch Changes
+
+- change package.json info.
+- Updated dependencies
+  - @mino_97/shared@1.0.1
+
 ## 1.0.0
 
 ### Major Changes
