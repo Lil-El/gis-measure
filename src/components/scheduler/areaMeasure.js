@@ -1,7 +1,7 @@
 import Polygon from "@arcgis/core/geometry/Polygon.js";
 import { contains, intersect } from "@arcgis/core/geometry/geometryEngine.js";
 
-import { ThreadTaskProcessor } from "../core";
+import { ThreadTaskProcessor } from "@processor/task-processor";
 
 import {
   threadPool,

@@ -1,6 +1,6 @@
 # processor
 
-Processor：任务处理器，可以依照迭代器的顺序执行任务。
+TaskProcessor：任务处理器，可以依照迭代器的顺序执行任务。
 
 - IdleTaskProcessor：空闲任务处理器，可以依照迭代器的顺序执行任务，不需要设置线程池。任务会直接执行。
   - 在空闲时执行 feature 渲染的任务。

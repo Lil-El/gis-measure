@@ -11,6 +11,12 @@ importers:
       '@arcgis/core':
         specifier: 4.27.6
         version: 4.27.6
+      '@processor/task-processor':
+        specifier: workspace:^
+        version: link:packages/task-processor
+      '@processor/thread-pool':
+        specifier: workspace:^
+        version: link:packages/thread-pool
       element-plus:
         specifier: ^2.9.8
         version: 2.9.9(vue@3.5.13)
@@ -30,6 +36,23 @@ importers:
       vite:
         specifier: ^6.3.1
         version: 6.3.3
+
+  packages/shared: {}
+
+  packages/task-processor:
+    dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+
+  packages/thread-pool:
+    dependencies:
+      '@processor/shared':
+        specifier: workspace:^
+        version: link:../shared
+      moment:
+        specifier: ^2.30.1
+        version: 2.30.1
 
 packages:
 

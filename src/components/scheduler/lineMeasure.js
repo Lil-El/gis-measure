@@ -2,7 +2,7 @@ import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
 import { geodesicDensify } from "@arcgis/core/geometry/geometryEngine.js";
 
-import { ThreadTaskProcessor } from "../core";
+import { ThreadTaskProcessor } from "@processor/task-processor";
 
 import { threadPool, viewPool, createChunkBuilder, getElevation, calcLineDistance } from "../utils";
 

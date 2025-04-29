@@ -1,3 +1,6 @@
+import moment from "moment";
+import { log } from "@processor/shared";
+
 export class ThreadPool {
   ThreadConstructor;
 
@@ -14,6 +17,9 @@ export class ThreadPool {
     if (preload) {
       this.fillThreads();
     }
+
+    // console.log(moment(Date.now()).format("HH:mm:ss"));
+    // log();
   }
 
   get threads() {
