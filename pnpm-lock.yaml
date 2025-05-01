@@ -11,10 +11,10 @@ importers:
       '@arcgis/core':
         specifier: 4.27.6
         version: 4.27.6
-      '@mino_97/task-processor':
+      '@lil-el/task-processor':
         specifier: workspace:^
         version: link:packages/task-processor
-      '@mino_97/thread-pool':
+      '@lil-el/thread-pool':
         specifier: workspace:^
         version: link:packages/thread-pool
       element-plus:
@@ -53,7 +53,7 @@ importers:
 
   packages/thread-pool:
     dependencies:
-      '@mino_97/shared':
+      '@lil-el/shared':
         specifier: workspace:^
         version: link:../shared
       moment:

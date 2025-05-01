@@ -1,4 +1,4 @@
-# @mino_97/task-processor
+# @lil-el/task-processor
 
 ## 1.0.1
 

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@arcgis/core": "4.27.6",
-    "@mino_97/task-processor": "workspace:^",
-    "@mino_97/thread-pool": "workspace:^",
+    "@lil-el/task-processor": "workspace:^",
+    "@lil-el/thread-pool": "workspace:^",
     "element-plus": "^2.9.8",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

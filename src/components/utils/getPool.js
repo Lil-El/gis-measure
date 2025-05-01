@@ -1,5 +1,5 @@
 import { IframeWorkerWrapper } from "../core/IframeWorker";
-import { ThreadPool } from "@mino_97/thread-pool";
+import { ThreadPool } from "@lil-el/thread-pool";
 import WebWorkerWrapper from "../core/worker.js?worker";
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "@mino_97/task-processor",
+  "name": "@lil-el/task-processor",
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

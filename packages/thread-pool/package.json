@@ -1,5 +1,5 @@
 {
-  "name": "@mino_97/thread-pool",
+  "name": "@lil-el/thread-pool",
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
@@ -13,10 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@mino_97/shared": "workspace:^",
-    "moment": "^2.30.1"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

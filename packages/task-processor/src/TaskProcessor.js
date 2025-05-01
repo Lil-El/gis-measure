@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export class TaskProcessor {
   // _ 约定 protected 属性
 
@@ -9,7 +7,6 @@ export class TaskProcessor {
 
   constructor() {
     this._init();
-    // console.log(_.find([1, 2, 3, 4, 5, 6], (v) => v > 5));
   }
 
   _init() {

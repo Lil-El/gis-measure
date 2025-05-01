@@ -3,7 +3,7 @@ import { ElSlider, ElSwitch } from "element-plus";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
 import GroupLayer from "@arcgis/core/layers/GroupLayer.js";
 import { geodesicArea, geodesicLength } from "@arcgis/core/geometry/geometryEngine.js";
-import { IdleTaskProcessor } from "@mino_97/task-processor";
+import { IdleTaskProcessor } from "@lil-el/task-processor";
 
 const LAYER_NAME = "MEASURE_HELPER";
 
