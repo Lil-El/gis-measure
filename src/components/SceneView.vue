@@ -107,7 +107,8 @@ function createMapView() {
     new GraphicsLayer({
       id: "graphicsLayer",
       elevationInfo: {
-        mode: "relative-to-scene",
+        // mode: "relative-to-scene", iframe中图形高于地面，使用absolute-height
+        mode: "absolute-height",
         unit: "meters",
       },
     })
