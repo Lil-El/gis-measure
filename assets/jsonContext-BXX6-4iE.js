@@ -1,0 +1,1 @@
+import{aq as r,ar as e}from"./index-BZRBOKU4.js";function a(t){return{origin:"portal-item",url:e(t.itemUrl),portal:t.portal||r.getDefault(),portalItem:t,readResourcePaths:[]}}function l(t){return{origin:"portal-item",messages:[],writtenProperties:[],url:t.itemUrl?e(t.itemUrl):null,portal:t.portal||r.getDefault(),portalItem:t}}export{a as e,l as o};
