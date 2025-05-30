@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
+  "homepage": "https://github.com/Lil-El/gis-measure",
   "dependencies": {
     "@arcgis/core": "4.27.6",
     "@lil-el/task-processor": "workspace:^",

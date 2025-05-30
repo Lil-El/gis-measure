@@ -22,7 +22,7 @@ export default function useCellAnalysisHelper(view, scheduler, slotSelector) {
 
   let _currentWork = "";
 
-  let _executeMeasureWork = () => void 0;
+  let _executeMeasureWork = null;
 
   let _callback = () => void 0;
 
@@ -206,6 +206,8 @@ export default function useCellAnalysisHelper(view, scheduler, slotSelector) {
 
   // 进行测量
   function handleMeasureWork() {
+    if (!_executeMeasureWork) return void 0;
+
     loading.value = true;
 
     let { work, tasks } = _executeMeasureWork(_precision.value);
@@ -351,7 +353,6 @@ export default function useCellAnalysisHelper(view, scheduler, slotSelector) {
             if (v) {
               handleMeasureWork();
             } else {
-              _precision.min = null;
               helpDestroy();
             }
           },

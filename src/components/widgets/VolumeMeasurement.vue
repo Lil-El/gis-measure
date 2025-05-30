@@ -166,7 +166,7 @@ async function onMeasure(graphic) {
       (c) => -c.attributes.vol
     );
 
-    const text = `填方量 ${Number(volume.cut).toFixed(2)} m³\n挖方量 ${Number(volume.fill).toFixed(2)} m³`;
+    const text = `挖方量 ${Number(volume.cut).toFixed(2)} m³\n填方量 ${Number(volume.fill).toFixed(2)} m³`;
     setCenterLabel(graphic, text);
   });
 }

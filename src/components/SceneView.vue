@@ -103,6 +103,8 @@ function createMapView() {
     },
   });
 
+  view.ui.remove("attribution");
+
   map.layers.add(
     new GraphicsLayer({
       id: "graphicsLayer",
