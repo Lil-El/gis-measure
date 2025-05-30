@@ -5,8 +5,9 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Lil-El/processor.git"
+    "url": "https://github.com/Lil-El/gis-measure.git"
   },
+  "homepage": "https://github.com/Lil-El/gis-measure",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
