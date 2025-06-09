@@ -1,3 +1,4 @@
+import { ElMessage } from "element-plus";
 import Polygon from "@arcgis/core/geometry/Polygon.js";
 import { contains, intersect } from "@arcgis/core/geometry/geometryEngine.js";
 
@@ -46,6 +47,7 @@ function createAreaMeasureScheduler() {
       result = await threadTaskProcessor.execute(taskArgWrapper("areaMeasure.areaTask", cells));
     } catch (error) {
       console.error(error);
+      ElMessage.error(`计算失败，请刷新重试。`);
     }
 
     return result.map((c) => ({ geometry: Polygon.fromJSON(c.geoJSON), attributes: { ...c.attributes, work } }));

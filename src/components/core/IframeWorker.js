@@ -44,8 +44,10 @@ export class IframeWorker {
     iframe.style.position = "fixed";
     iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
-    iframe.style.width = "100vw";
-    iframe.style.height = "100vh";
+    iframe.style.width = "50vw";
+    iframe.style.height = "50vh";
+    iframe.style.left = "0";
+    iframe.style.top = "0";
 
     iframe.contentWindow.uuid = uuid;
 

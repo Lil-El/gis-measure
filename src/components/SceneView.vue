@@ -105,16 +105,18 @@ function createMapView() {
 
   view.ui.remove("attribution");
 
-  map.layers.add(
-    new GraphicsLayer({
-      id: "graphicsLayer",
-      elevationInfo: {
-        // mode: "relative-to-scene", iframe中图形高于地面，使用absolute-height
-        mode: "absolute-height",
-        unit: "meters",
-      },
-    })
-  );
+  view.when(() => {
+    map.layers.add(
+      new GraphicsLayer({
+        id: "graphicsLayer",
+        elevationInfo: {
+          mode: "relative-to-scene",
+          // mode: "absolute-height",
+          unit: "meters",
+        },
+      })
+    );
+  });
 
   return view;
 }
@@ -144,6 +146,8 @@ function createLayer() {
       });
     } else {
       layer.when(() => {
+        console.log("GOTO");
+
         goTo(layer.fullExtent);
       });
       map.value.add(layer);
@@ -172,19 +176,8 @@ function _createTypeLayer(config) {
 }
 
 // 跳转
-function goTo(center) {
-  const view = sceneView.value;
-
-  return view.goTo(
-    {
-      center,
-      tilt: 0,
-      heading: 0,
-    },
-    {
-      duration: 0,
-    }
-  );
+function goTo(target) {
+  return sceneView.value.goTo(target, { duration: 0 });
 }
 
 onMounted(() => {
@@ -193,15 +186,15 @@ onMounted(() => {
   });
 
   window.addEventListener("message", async (evt) => {
-    const { invoke, args } = evt.data;
-
-    if (!invoke) return void 0;
-
-    const [module, method] = invoke.split(".");
-
-    let result = null;
-
     try {
+      const { invoke, args } = evt.data;
+
+      if (!invoke) return void 0;
+
+      const [module, method] = invoke.split(".");
+
+      let result = null;
+
       if (module === "volumeMeasure") {
         result = await volumeMeasure[method](sceneView.value, args);
       } else if (module === "areaMeasure") {
@@ -211,11 +204,18 @@ onMounted(() => {
       } else {
         result = await synchronousView(args);
       }
+      sendMessage({ data: result });
     } catch (error) {
       console.error(error);
+      sendMessage({
+        data: {
+          success: false,
+          error: error.message,
+          stack: error.stack,
+          detail: "index.vue",
+        },
+      });
     }
-
-    sendMessage({ data: result });
   });
 });
 
@@ -290,9 +290,9 @@ function synchronousView(args) {
       layers.forEach((l) => (l.visible = false));
     }
 
-    const groundLayer = map.ground.layers.find((l) => l.id === "ground");
+    const groundLayer = map.ground.layers.find((l) => l.id === "地形基座");
     if (groundLayer?.url !== groundUrl) {
-      const layer = createLayer({ id: "ground", url: groundUrl }, "ElevationLayer");
+      const layer = createLayer({ id: "地形基座", url: groundUrl }, "ElevationLayer");
 
       let { promise, resolve } = Promise.withResolvers();
       p2 = promise;

@@ -1,3 +1,4 @@
+import { ElMessage } from "element-plus";
 import Point from "@arcgis/core/geometry/Point.js";
 import Polyline from "@arcgis/core/geometry/Polyline.js";
 import { geodesicDensify } from "@arcgis/core/geometry/geometryEngine.js";
@@ -38,6 +39,7 @@ function createLineMeasureScheduler() {
       result = (await Promise.all(chunks.map(threadTaskProcessor.execute.bind(threadTaskProcessor)))).flat();
     } catch (error) {
       console.error(error);
+      ElMessage.error(`计算失败，请刷新重试。`);
     }
 
     return result.map((c) => {

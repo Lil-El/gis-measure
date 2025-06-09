@@ -15,13 +15,13 @@
       <div class="measurement-container" v-show="state === 'active'" v-loading="loading">
         <div class="measurement-content">
           <div>挖方量</div>
-          <div class=".esri-direct-line-measurement-3d__measurement-item-value">
+          <div class="esri-direct-line-measurement-3d__measurement-item-value">
             {{ Number(volume.cut).toFixed(2) }} m³
           </div>
         </div>
         <div class="measurement-content">
           <div>填方量</div>
-          <div class=".esri-direct-line-measurement-3d__measurement-item-value">
+          <div class="esri-direct-line-measurement-3d__measurement-item-value">
             {{ Number(volume.fill).toFixed(2) }} m³
           </div>
         </div>

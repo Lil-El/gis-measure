@@ -39,6 +39,12 @@ export class ThreadTaskProcessor extends TaskProcessor {
     thread.postMessage.call(thread, data);
 
     thread.onmessage = (e) => {
+      if (e.data.success === false && e.data.error) {
+        this.#pool.destroyThread(thread);
+        this._handleTaskError(reject, e.data);
+        return void 0;
+      }
+
       this.#pool.recycleThread(thread);
       this._handleTaskResponse(resolve, e.data);
     };

@@ -15,7 +15,7 @@
       <div class="measurement-container" v-show="state === 'active'" v-loading="loading">
         <div class="measurement-content">
           <div>面积</div>
-          <div class=".esri-direct-line-measurement-3d__measurement-item-value">{{ Number(area).toFixed(2) }} m²</div>
+          <div class="esri-direct-line-measurement-3d__measurement-item-value">{{ Number(area).toFixed(2) }} m²</div>
         </div>
         <div id="area-control-slot"></div>
         <el-button class="measurement-button" @click="handleNew">新测量</el-button>

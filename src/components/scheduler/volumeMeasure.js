@@ -1,3 +1,4 @@
+import { ElMessage } from "element-plus";
 import Polygon from "@arcgis/core/geometry/Polygon.js";
 import { contains, geodesicArea, intersect } from "@arcgis/core/geometry/geometryEngine.js";
 
@@ -26,6 +27,7 @@ function createVolumeMeasureScheduler() {
       result = (await Promise.all(viewTaskChunk.map(viewTaskProcessor.execute.bind(viewTaskProcessor)))).flat();
     } catch (error) {
       console.error(error);
+      ElMessage.error(`计算失败，请刷新重试。`);
     }
 
     return result.map((c) => ({ geometry: Polygon.fromJSON(c.geoJSON), attributes: { ...c.attributes, work } }));

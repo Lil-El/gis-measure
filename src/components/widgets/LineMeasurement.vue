@@ -15,7 +15,7 @@
       <div class="measurement-container" v-show="state === 'active'" v-loading="loading">
         <div class="measurement-content">
           <div>距离</div>
-          <div class=".esri-direct-line-measurement-3d__measurement-item-value">
+          <div class="esri-direct-line-measurement-3d__measurement-item-value">
             {{ Number(distance).toFixed(2) }} m
           </div>
         </div>
