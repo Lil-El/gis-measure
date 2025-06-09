@@ -1,0 +1,1 @@
+import{cs as l}from"./index-DXZ_271k.js";function m(e,n=l(e)){return n.mode!=="on-the-ground"&&!(e.geometry==null||!e.geometry.hasZ)}function s(e,n){let o=null;const r=e.events.on("grab-changed",t=>{o!=null&&(o.remove(),o=null),t.action==="start"&&(o=e.disableDisplay())});return{remove(){o!=null&&o.remove(),r.remove()}}}export{m as n,s as o};
